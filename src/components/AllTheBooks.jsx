@@ -1,6 +1,6 @@
 import MyNav from "./MyNav";
 import { useState } from "react";
-import { Card, Button, Container, Row, Col } from "react-bootstrap";
+import { Card, Button, Container, Row, Col, Badge } from "react-bootstrap";
 import fantasy from "../data/fantasy.json";
 import horror from "../data/horror.json";
 import romance from "../data/romance.json";
@@ -10,17 +10,35 @@ import history from "../data/history.json";
 const AllTheBooks = function () {
   const [books, setBooks] = useState(fantasy);
   const [category, setCategory] = useState("Fantasy");
+  const [cartCount, setCart] = useState(0);
 
   const BookSelected = (newBooks, newCategory) => {
     setBooks(newBooks);
     setCategory(newCategory);
   };
 
+  const addToCart = () => {
+    setCart(cartCount + 1);
+  };
+
   return (
     <>
       <MyNav category={category} />
       <Container className="my-4">
-        <h2 className="text-center mb-4">Libri {category}</h2>
+        <div className="d-flex justify-content-between align-items-center mb-4">
+          <h2 className="text-center mb-0">Libri-{category}</h2>
+          <div>
+            <Button variant="warning" className="position-relative">
+              Carrello{" "}
+              <Badge
+                bg="danger"
+                className="position-absolute top-0 border border-radius rounded-circle"
+              >
+                {cartCount}
+              </Badge>
+            </Button>
+          </div>
+        </div>
         <div className="d-flex justify-content-center mb-4">
           <Button className="mx-2" onClick={() => BookSelected(history, "History")}>
             History
@@ -48,7 +66,9 @@ const AllTheBooks = function () {
                   <Card.Text>
                     <strong>Prezzo:</strong> €{book.price.toFixed(2)}
                   </Card.Text>
-                  <Button variant="primary">Acquista</Button>
+                  <Button variant="primary" onClick={addToCart}>
+                    Acquista
+                  </Button>
                 </Card.Body>
               </Card>
             </Col>
